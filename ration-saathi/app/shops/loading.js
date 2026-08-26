@@ -1,0 +1,1 @@
+export default function Loading() { return <main aria-label="Loading shops" className="mx-auto max-w-2xl animate-pulse px-4 py-8"><div className="h-5 w-28 rounded bg-slate-200" /><div className="mt-4 h-10 w-72 rounded bg-slate-200" />{[1, 2, 3].map((item) => <div key={item} className="mt-5 h-44 rounded-2xl bg-slate-200" />)}</main>; }

@@ -1,0 +1,1 @@
+@tailwind base;@tailwind components;@tailwind utilities;@layer base{body{@apply bg-slate-50 text-slate-800 antialiased;}button,a,input,select{@apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-trust-700 focus-visible:ring-offset-2;}button,a{touch-action:manipulation;}}

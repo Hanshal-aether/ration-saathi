@@ -1,0 +1,1 @@
+export default function Loading() { return <main aria-label="Loading shop times" className="mx-auto max-w-2xl animate-pulse px-4 py-8"><div className="h-5 w-24 rounded bg-slate-200" /><div className="mt-6 h-10 w-80 rounded bg-slate-200" /><div className="mt-8 h-64 rounded-2xl bg-slate-200" /></main>; }

@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+model Citizen {
+  id String @id @default(cuid())
+  name String
+  phone String
+  aadhaarMock String @unique
+  preferredLanguage String @default("en")
+  applications Application[]
+  bookedSlots TimeSlot[] @relation("Booked")
+}
+
+model Application {
+  id String @id @default(cuid())
+  citizenId String
+  type String
+  status String @default("submitted")
+  submittedAt DateTime @default(now())
+  statusReason String
+  documentsSubmitted String
+  citizen Citizen @relation(fields:[citizenId],references:[id],onDelete:Cascade)
+}
+
+model FairPriceShop {
+  id String @id @default(cuid())
+  name String
+  address String
+  lat Float
+  lng Float
+  isOpen Boolean
+  currentQueueLength Int
+  stockStatus String
+  timeSlots TimeSlot[]
+}
+
+model TimeSlot {
+  id String @id @default(cuid())
+  shopId String
+  date DateTime
+  time String
+  isBooked Boolean @default(false)
+  bookedByCitizenId String?
+  shop FairPriceShop @relation(fields:[shopId],references:[id],onDelete:Cascade)
+  bookedByCitizen Citizen? @relation("Booked",fields:[bookedByCitizenId],references:[id])
+}

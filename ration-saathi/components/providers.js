@@ -1,0 +1,1 @@
+"use client";import{createContext,useContext,useState}from"react";const C=createContext();export const useLang=()=>useContext(C);export function Providers({children}){const[lang,setLang]=useState("en");return <C.Provider value={{lang,setLang}}>{children}</C.Provider>}
