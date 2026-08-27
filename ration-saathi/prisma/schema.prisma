@@ -12,6 +12,7 @@ model Citizen {
   name String
   phone String
   aadhaarMock String @unique
+  state String @default("Maharashtra")
   preferredLanguage String @default("en")
   applications Application[]
   bookedSlots TimeSlot[] @relation("Booked")
@@ -25,6 +26,7 @@ model Application {
   submittedAt DateTime @default(now())
   statusReason String
   documentsSubmitted String
+  state String @default("Maharashtra")
   citizen Citizen @relation(fields:[citizenId],references:[id],onDelete:Cascade)
 }
 
@@ -32,6 +34,8 @@ model FairPriceShop {
   id String @id @default(cuid())
   name String
   address String
+  city String
+  state String @default("Maharashtra")
   lat Float
   lng Float
   isOpen Boolean
@@ -50,3 +54,4 @@ model TimeSlot {
   shop FairPriceShop @relation(fields:[shopId],references:[id],onDelete:Cascade)
   bookedByCitizen Citizen? @relation("Booked",fields:[bookedByCitizenId],references:[id])
 }
+

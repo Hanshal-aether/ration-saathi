@@ -1,24 +1,113 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { types } from "../lib/config";
-import { useLang } from "../components/providers";
+import { useLang, useStateContext } from "../components/providers";
+import { StateSelector } from "../components/state-selector";
 
 const copy = {
-  en: { eyebrow: "Ration services, made simpler", title: "Get help with your ration card", intro: "Choose what you need. We will guide you one clear step at a time.", trust: ["No confusing forms", "Save progress automatically", "Plain-language updates"], need: "What do you need help with?", track: "Track a request", shops: "Find a nearby shop", ready: "Already submitted a request?", people: "Designed for every household" },
-  hi: { eyebrow: "राशन सेवाएँ, अब आसान", title: "अपने राशन कार्ड के लिए मदद पाएँ", intro: "अपनी ज़रूरत चुनें। हम आपको एक-एक स्पष्ट कदम में मार्गदर्शन देंगे।", trust: ["मुश्किल फॉर्म नहीं", "काम अपने आप सेव होता है", "सरल भाषा में अपडेट"], need: "आपको किस मदद की ज़रूरत है?", track: "आवेदन की स्थिति देखें", shops: "नज़दीकी दुकान खोजें", ready: "क्या आपने पहले आवेदन किया है?", people: "हर परिवार के लिए बनाया गया" },
+  en: {
+    welcome: "Welcome back",
+    subtitle: "Your ration services, streamlined",
+    quick: "Quick Access",
+    services: "All Services",
+  },
+  hi: {
+    welcome: "स्वागत है",
+    subtitle: "आपकी राशन सेवाएं, सरलीकृत",
+    quick: "त्वरित पहुंच",
+    services: "सभी सेवाएं",
+  },
 };
 
 export default function Home() {
-  const { lang } = useLang(); const t = copy[lang];
-  return <main className="mx-auto max-w-2xl px-4 pb-4 pt-8 sm:px-6">
-    <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-trust-700 to-service-600 px-6 py-8 text-white shadow-lg sm:px-8">
-      <p className="text-base font-bold text-service-100">{t.eyebrow}</p>
-      <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight">{t.title}</h1>
-      <p className="mt-4 max-w-lg text-lg leading-7 text-blue-50">{t.intro}</p>
-      <div className="mt-6 grid gap-2 sm:grid-cols-3">{t.trust.map((item) => <p key={item} className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold">✓ {item}</p>)}</div>
-    </section>
-    <section className="mt-8"><div className="flex items-end justify-between"><div><p className="text-base font-semibold text-service-600">{t.people}</p><h2 className="mt-1 text-2xl font-bold text-slate-900">{t.need}</h2></div><span aria-hidden="true" className="text-3xl">👋</span></div><div className="mt-5 grid gap-4">{types.map((type, index) => <Link key={type.slug} href={`/apply/${type.slug}`} className="group relative flex min-h-24 items-center gap-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-service-500 hover:shadow-md"><span aria-hidden="true" className={`flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl text-3xl ${index % 2 ? "bg-trust-50" : "bg-service-50"}`}>{type.icon}</span><span className="min-w-0 flex-1"><b className="block text-lg leading-6 text-slate-900">{lang === "hi" ? type.hi : type.en}</b><span className="mt-1 block text-base text-slate-600">{type.desc}</span></span><span aria-hidden="true" className="text-2xl text-trust-700">›</span></Link>)}</div></section>
-    <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5"><p className="text-base font-semibold text-slate-700">{t.ready}</p><div className="mt-3 grid grid-cols-2 gap-3"><Link href="/status" className="flex min-h-14 items-center justify-center rounded-xl border border-trust-700 px-3 text-center text-base font-bold text-trust-700">◷ {t.track}</Link><Link href="/shops" className="flex min-h-14 items-center justify-center rounded-xl bg-service-600 px-3 text-center text-base font-bold text-white">⌖ {t.shops}</Link></div></section>
-  </main>;
+  const { lang } = useLang();
+  const { stateSelected } = useStateContext();
+  const router = useRouter();
+  const [isReady, setIsReady] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isLoggedIn = localStorage.getItem("ration_saathi_logged_in") === "true";
+      if (!isLoggedIn) {
+        router.replace("/login");
+        return;
+      }
+      setIsReady(true);
+      setIsChecking(false);
+    }
+  }, [router]);
+
+  if (isChecking || !isReady || !stateSelected) return null;
+
+  const t = copy[lang];
+
+  return (
+    <>
+      <StateSelector />
+      <main className="pb-24 pt-8 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Welcome Section */}
+          <div className="mb-12">
+            <h1 className="text-3xl font-bold text-gray-900 mb-1">{t.welcome}</h1>
+            <p className="text-gray-500 text-lg">{t.subtitle}</p>
+          </div>
+
+          {/* Quick Access */}
+          <div className="mb-12">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">{t.quick}</h2>
+            <div className="grid grid-cols-3 gap-3">
+              <Link
+                href="/status"
+                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-sky-500 hover:shadow-lg hover:scale-105 transition text-center"
+              >
+                <div className="text-3xl mb-2">◷</div>
+                <div className="text-xs font-semibold text-gray-900">Status</div>
+              </Link>
+              <Link
+                href="/shops"
+                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-sky-500 hover:shadow-lg hover:scale-105 transition text-center"
+              >
+                <div className="text-3xl mb-2">🏪</div>
+                <div className="text-xs font-semibold text-gray-900">Shops</div>
+              </Link>
+              <Link
+                href="/apply/new_card"
+                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-sky-500 hover:shadow-lg hover:scale-105 transition text-center"
+              >
+                <div className="text-3xl mb-2">➕</div>
+                <div className="text-xs font-semibold text-gray-900">Apply</div>
+              </Link>
+            </div>
+          </div>
+
+          {/* All Services */}
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">{t.services}</h2>
+            <div className="space-y-2">
+              {types.map((type) => (
+                <Link
+                  key={type.slug}
+                  href={`/apply/${type.slug}`}
+                  className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-sky-500 hover:shadow-lg hover:bg-sky-50/30 transition"
+                >
+                  <div className="text-2xl">{type.icon}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-gray-900">
+                      {lang === "hi" ? type.hi : type.en}
+                    </div>
+                    <p className="text-xs text-gray-500">{type.desc}</p>
+                  </div>
+                  <span className="text-gray-300">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
+  );
 }

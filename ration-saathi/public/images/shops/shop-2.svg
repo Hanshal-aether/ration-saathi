@@ -1,0 +1,23 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fafaf9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5f5f4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg2)"/>
+  <g transform="translate(200, 150)">
+    <!-- Shop building modern -->
+    <rect x="-75" y="-55" width="150" height="95" fill="#6366f1" rx="6"/>
+    <!-- Door -->
+    <rect x="-25" y="-15" width="50" height="75" fill="#4f46e5" rx="3"/>
+    <!-- Glass panel -->
+    <rect x="-55" y="-45" width="50" height="45" fill="#93c5fd" rx="3"/>
+    <rect x="5" y="-45" width="50" height="45" fill="#93c5fd" rx="3"/>
+    <!-- Roof modern -->
+    <polygon points="-80,-55 0,-95 80,-55" fill="#4f46e5"/>
+    <!-- Modern sign -->
+    <rect x="-60" y="-100" width="120" height="25" fill="#0ea5e9" rx="4"/>
+    <text x="0" y="-80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">राशन दुकान</text>
+  </g>
+</svg>
